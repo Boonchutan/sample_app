@@ -1,0 +1,185 @@
+<% provide(:title, "Ashtanga Flashcard Game") %>
+
+<style>
+  body { background: #f5f0eb; }
+
+  .flashcard-wrapper {
+    max-width: 640px;
+    margin: 40px auto;
+    font-family: Georgia, serif;
+  }
+
+  .scoreboard {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 16px;
+    color: #555;
+  }
+
+  .scoreboard strong { color: #333; font-size: 20px; }
+
+  .card {
+    background: #fff;
+    border: 2px solid #c8a96e;
+    border-radius: 12px;
+    padding: 40px 30px;
+    text-align: center;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+    margin-bottom: 24px;
+  }
+
+  .card .label {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #999;
+    margin-bottom: 10px;
+  }
+
+  .card .asana-name {
+    font-size: 32px;
+    font-weight: bold;
+    color: #3a2a0a;
+    margin: 10px 0 24px;
+  }
+
+  .card .question {
+    font-size: 17px;
+    color: #555;
+    margin-bottom: 24px;
+  }
+
+  .card .question em {
+    font-style: normal;
+    font-weight: bold;
+    color: #8b5e2a;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .answer-input {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 18px;
+    border: 2px solid #c8a96e;
+    border-radius: 8px;
+    text-align: center;
+    outline: none;
+    margin-bottom: 16px;
+    font-family: Georgia, serif;
+    box-sizing: border-box;
+  }
+
+  .answer-input:focus { border-color: #8b5e2a; }
+
+  .btn-check {
+    background: #8b5e2a;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 40px;
+    font-size: 18px;
+    cursor: pointer;
+    font-family: Georgia, serif;
+    width: 100%;
+  }
+
+  .btn-check:hover { background: #6e4a1f; }
+
+  .result-box {
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .result-correct { background: #dff5e1; border: 1px solid #6dba80; color: #2d6e3d; }
+  .result-wrong   { background: #fdecea; border: 1px solid #e08080; color: #7a2020; }
+
+  .actions {
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .btn-reset {
+    background: none;
+    border: 1px solid #aaa;
+    border-radius: 6px;
+    padding: 6px 18px;
+    color: #777;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: Georgia, serif;
+  }
+
+  .btn-reset:hover { background: #eee; }
+
+  .sequence-hint {
+    font-size: 12px;
+    color: #bbb;
+    margin-top: 8px;
+  }
+
+  h2.page-title {
+    text-align: center;
+    font-size: 26px;
+    color: #3a2a0a;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: #999;
+    font-size: 13px;
+    margin-bottom: 28px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+</style>
+
+<div class="flashcard-wrapper">
+  <h2 class="page-title">Ashtanga Flashcard</h2>
+  <p class="subtitle">Primary Series &mdash; Yoga Chikitsa</p>
+
+  <% if flash[:success] %>
+    <div class="result-box result-correct">&#10003; <%= flash[:success] %></div>
+  <% end %>
+  <% if flash[:error] %>
+    <div class="result-box result-wrong">&#10007; <%= flash[:error] %></div>
+  <% end %>
+
+  <div class="scoreboard">
+    Score: <strong><%= @score %> / <%= @total %></strong>
+    <% if @total > 0 %>
+      &nbsp;&mdash;&nbsp;<%= (@score * 100.0 / @total).round %>%
+    <% end %>
+  </div>
+
+  <div class="card">
+    <div class="label">Current Asana</div>
+    <div class="asana-name"><%= @card_asana %></div>
+
+    <div class="question">
+      What is the asana that comes <em><%= @ask_direction %></em> this one?
+    </div>
+
+    <%= form_tag flashcard_check_path, method: :post do %>
+      <%= text_field_tag :answer, nil,
+            placeholder: "Type the Sanskrit name...",
+            class: "answer-input",
+            autocomplete: "off",
+            autofocus: true %>
+      <%= submit_tag "Check Answer", class: "btn-check" %>
+    <% end %>
+
+    <p class="sequence-hint">Asana <%= @card_index + 1 %> of <%= FlashcardController::ASANAS.length %> in the sequence</p>
+  </div>
+
+  <div class="actions">
+    <%= form_tag flashcard_reset_path, method: :post do %>
+      <%= submit_tag "Reset Score", class: "btn-reset" %>
+    <% end %>
+  </div>
+</div>
