@@ -63,7 +63,7 @@ class FlashcardController < ApplicationController
     "Baddha Padmasana",
     "Padmasana",
     "Utpluthih",
-    "Savasana"
+    "Lay Down"
   ].freeze
 
   def index
