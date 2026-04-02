@@ -4,6 +4,10 @@ SampleApp::Application.routes.draw do
   get "static_pages/about"
   get "static_pages/contact"
 
+  get  "flashcard"       => "flashcard#index",  :as => :flashcard
+  post "flashcard/check" => "flashcard#check",  :as => :flashcard_check
+  post "flashcard/reset" => "flashcard#reset",  :as => :flashcard_reset
+
 
 
   # The priority is based upon order of creation:
