@@ -5,3 +5,6 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+YoutubeIngestor.call('https://youtube.com/shorts/uLOrKlahqy0?si=1sx9Fbq6_sxSLjmA')
+puts "Seeded YouTube Short uLOrKlahqy0"

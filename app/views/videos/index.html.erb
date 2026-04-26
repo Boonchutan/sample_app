@@ -1,0 +1,49 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 col-md-offset-2">
+      <h1>Ingested Videos</h1>
+
+      <div class="well">
+        <h4>Ingest a YouTube Short</h4>
+        <%= form_tag videos_path, method: :post do %>
+          <div class="input-group">
+            <%= text_field_tag :url, nil,
+                  class: "form-control",
+                  placeholder: "https://youtube.com/shorts/..." %>
+            <span class="input-group-btn">
+              <%= submit_tag "Ingest", class: "btn btn-primary" %>
+            </span>
+          </div>
+        <% end %>
+      </div>
+
+      <% if @videos.empty? %>
+        <p class="text-muted">No videos ingested yet.</p>
+      <% else %>
+        <% @videos.each do |video| %>
+          <div class="thumbnail" style="margin-bottom: 20px; padding: 10px;">
+            <div class="row">
+              <% if video.thumbnail_url.present? %>
+                <div class="col-xs-4">
+                  <%= link_to video_path(video) do %>
+                    <%= image_tag video.thumbnail_url, class: "img-responsive" %>
+                  <% end %>
+                </div>
+                <div class="col-xs-8">
+              <% else %>
+                <div class="col-xs-12">
+              <% end %>
+                <h4><%= link_to video.title.presence || video.youtube_id, video_path(video) %></h4>
+                <p class="text-muted"><small><%= video.author_name %></small></p>
+                <% if video.transcript.present? %>
+                  <p><%= truncate(video.transcript, length: 120) %></p>
+                <% end %>
+                <p><small class="text-muted">Ingested <%= time_ago_in_words(video.ingested_at) %> ago</small></p>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
