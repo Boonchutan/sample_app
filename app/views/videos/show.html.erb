@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 col-md-offset-2">
+      <%= link_to "← Back", videos_path, class: "btn btn-default" %>
+
+      <h2><%= @video.title.presence || @video.youtube_id %></h2>
+      <p class="text-muted">by <%= @video.author_name %> &middot; ingested <%= time_ago_in_words(@video.ingested_at) %> ago</p>
+
+      <% if @video.embed_html.present? %>
+        <div class="embed-responsive embed-responsive-9by16" style="max-width:320px; margin-bottom:20px;">
+          <%= raw @video.embed_html %>
+        </div>
+      <% elsif @video.thumbnail_url.present? %>
+        <%= image_tag @video.thumbnail_url, class: "img-responsive", style: "max-width:320px; margin-bottom:20px;" %>
+      <% end %>
+
+      <% if @video.transcript.present? %>
+        <div class="panel panel-default">
+          <div class="panel-heading"><strong>Transcript</strong></div>
+          <div class="panel-body">
+            <%= simple_format @video.transcript %>
+          </div>
+        </div>
+      <% else %>
+        <div class="alert alert-warning">No transcript available for this video.</div>
+      <% end %>
+
+      <p><small class="text-muted">YouTube ID: <code><%= @video.youtube_id %></code></small></p>
+      <p><small><%= link_to @video.shorts_url, @video.shorts_url, target: "_blank" %></small></p>
+    </div>
+  </div>
+</div>
